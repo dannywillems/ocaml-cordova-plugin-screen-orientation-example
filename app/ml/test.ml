@@ -7,15 +7,14 @@ let new_button action =
   row##.className := (Js.string "row");
   col##.className := (Js.string "col s12");
   button##.className := (Js.string "waves-effect waves-light btn");
-  button##.innerHTML := Screenorientation.orientation_to_js_string
-  action;
+  button##.innerHTML := (Js.string (Screen_orientation.orientation_to_string
+  action));
   Lwt.async
   ( fun () ->
     Lwt_js_events.clicks button
     ( fun _ev _thread ->
-      let screen = Screenorientation.screen_orientation () in
-      screen##(lockOrientation (Screenorientation.orientation_to_js_string
-      action));
+      let screen = Screen_orientation.t () in
+      screen#lock_orientation action;
       Lwt.return ()
     )
   );
@@ -26,12 +25,12 @@ let new_button action =
 let on_device_ready _ =
   let div = Dom_html.createDiv doc in
   div##.className := (Js.string "container center");
-  Dom.appendChild div (new_button Screenorientation.portrait);
-  Dom.appendChild div (new_button Screenorientation.portrait_primary);
-  Dom.appendChild div (new_button Screenorientation.portrait_secondary);
-  Dom.appendChild div (new_button Screenorientation.landscape);
-  Dom.appendChild div (new_button Screenorientation.landscape_primary);
-  Dom.appendChild div (new_button Screenorientation.landscape_secondary);
+  Dom.appendChild div (new_button Screen_orientation.portrait);
+  Dom.appendChild div (new_button Screen_orientation.portrait_primary);
+  Dom.appendChild div (new_button Screen_orientation.portrait_secondary);
+  Dom.appendChild div (new_button Screen_orientation.landscape);
+  Dom.appendChild div (new_button Screen_orientation.landscape_primary);
+  Dom.appendChild div (new_button Screen_orientation.landscape_secondary);
   Dom.appendChild doc##.body div;
   Js._false
 
