@@ -23,7 +23,7 @@ let new_button action =
   Dom.appendChild row col;
   row
 
-let on_device_ready _ =
+let on_device_ready () =
   let div = Dom_html.createDiv doc in
   div##.className := (Js.string "container center");
   Dom.appendChild div (new_button Cordova_screen_orientation.portrait);
@@ -32,9 +32,6 @@ let on_device_ready _ =
   Dom.appendChild div (new_button Cordova_screen_orientation.landscape);
   Dom.appendChild div (new_button Cordova_screen_orientation.landscape_primary);
   Dom.appendChild div (new_button Cordova_screen_orientation.landscape_secondary);
-  Dom.appendChild doc##.body div;
-  Js._false
+  Dom.appendChild doc##.body div
 
-let _ =
-  Dom.addEventListener Dom_html.document (Dom.Event.make "deviceready")
-(Dom_html.handler on_device_ready) Js._false
+let _ = Cordova.Event.device_ready on_device_ready
